@@ -151,7 +151,7 @@ class ExtensionApiManager extends BaseEventEmitter {
                 else if (diffDays < 8) bucket = '1w';
                 else bucket = 'stale';
                 const config = vscode.workspace.getConfiguration('explorerDates');
-                badgeText = formatBadge(bucket, 'fs', config) || '?';
+                badgeText = formatBadge(bucket, 'fs', config, 'high', lastModified.getTime()) || '?';
             } catch { /* ignore */ }
 
             // Basic decoration without relying on external dependencies

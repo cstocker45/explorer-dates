@@ -79,8 +79,37 @@ function formatBadgeAge(bucket) {
     }
 }
 
-function formatBadge(bucket, source, config, confidence = 'low') {
+// Real age of a file as a ≤2-character badge, from its exact timestamp.
+// Minutes and hours past the first digit use quarter fractions (¼h, ½h, ¾h, ½d, ¾d) to stay within 2 characters.
+function formatBadgeExactAge(exactTimestamp, now = Date.now()) {
+    const time = new Date(exactTimestamp).getTime();
+    if (!Number.isFinite(time)) return null;
+    const minutes = Math.max(0, now - time) / 60000;
+    const hours = minutes / 60;
+    const days = hours / 24;
+    if (minutes < 10) return `${Math.floor(minutes)}m`;
+    if (minutes < 20) return '\u00bch';
+    if (minutes < 40) return '\u00bdh';
+    if (hours < 1) return '\u00beh';
+    if (hours < 10) return `${Math.max(1, Math.round(hours))}h`;
+    if (hours < 18) return '\u00bdd';
+    if (days < 1) return '\u00bed';
+    if (days < 7) return `${Math.max(1, Math.floor(days))}d`;
+    if (days < 30) return `${Math.floor(days / 7)}w`;
+    const months = Math.floor(days / 30.44);
+    if (months < 12) return months < 10 ? `${months}M` : String(months);
+    const years = Math.floor(days / 365.25);
+    return years < 10 ? `${years}y` : '9+';
+}
+
+// When an exact timestamp is known, the badge shows the real age (5m, 2h, 3d, 2w, 6M, 1y);
+// otherwise it falls back to the freshness bucket symbol.
+function formatBadge(bucket, source, config, confidence = 'low', exactTimestamp = null) {
     const showUnknown = Boolean(getConfigValue(config, 'freshnessShowUnknown', true));
+    if (exactTimestamp) {
+        const exactAge = formatBadgeExactAge(exactTimestamp);
+        if (exactAge) return exactAge;
+    }
     if (bucket === 'unknown' || source === 'unknown') {
         return showUnknown ? '?' : null;
     }
@@ -415,6 +444,7 @@ module.exports = {
     bucketFromAge,
     formatBucketLabel,
     formatBadgeAge,
+    formatBadgeExactAge,
     formatSourceLabel,
     compareFreshness,
     SOURCE_RANK,

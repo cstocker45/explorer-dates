@@ -1,5 +1,24 @@
 # Explorer Dates
 
+> **Fork: real-age badges.** This fork of [incredincomp/explorer-dates](https://github.com/incredincomp/explorer-dates) shows each file's real age in the Explorer badge (`5m`, `2h`, `3d`, `2w`, `6M`, `1y`), not the coarse freshness symbols (`!!`, `T`, `~~`). Upstream 1.3.1 ignores `explorerDates.dateDecorationFormat` for badges. Within VS Code's 2-character limit, the ages are:
+>
+> | Age | Badge |
+> |---|---|
+> | 0–9 minutes | `0m`–`9m` |
+> | 10–59 minutes | `¼h` / `½h` / `¾h` |
+> | 1–9 hours | `1h`–`9h` |
+> | 10–23 hours | `½d` / `¾d` |
+> | 1–6 days | `1d`–`6d` |
+> | 1–4 weeks | `1w`–`4w` |
+> | 1–9 months | `1M`–`9M` |
+> | 10–11 months | `10`, `11` |
+> | years | `1y`–`9y`, then `9+` |
+>
+> The tooltip still shows the exact timestamp. Files without a known timestamp keep the original symbol.
+>
+> - **Source change:** `formatBadgeExactAge` in `src/utils/freshnessResolver.js`, used by `formatBadge` when an exact timestamp is passed. Tests are in `tests/test-exact-age-badges.js`.
+> - **Ready-to-install build:** see this fork's [Releases](https://github.com/cstocker45/explorer-dates/releases). It is the Marketplace 1.3.1 build with the same change applied to its bundled `dist/` files. Install it with *Extensions: Install from VSIX…*. VS Code then pins it, so it is not auto-updated.
+
 [![Marketplace](https://img.shields.io/visual-studio-marketplace/v/incredincomp.explorer-dates.svg?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=incredincomp.explorer-dates)
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/incredincomp.explorer-dates.svg?color=brightgreen)](https://marketplace.visualstudio.com/items?itemName=incredincomp.explorer-dates)
 [![Rating](https://img.shields.io/visual-studio-marketplace/stars/incredincomp.explorer-dates?cacheSeconds=3600)](https://marketplace.visualstudio.com/items?itemName=incredincomp.explorer-dates&ssr=false#review-details)

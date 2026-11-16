@@ -374,7 +374,8 @@ function createDecorationProviderHelpers(provider) {
                     freshness?.bucket || 'unknown',
                     freshness?.source || 'unknown',
                     config,
-                    freshness?.confidence || 'low'
+                    freshness?.confidence || 'low',
+                    freshness?.exactTimestamp || null
                 );
                 if (!badge) {
                     nullReason = 'badge-suppressed';
